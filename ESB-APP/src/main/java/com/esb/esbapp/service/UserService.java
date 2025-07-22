@@ -1,4 +1,4 @@
-package com.example.wattwise.service;
+package com.esb.esbapp.service;
 
 import org.springframework.stereotype.Service;
 

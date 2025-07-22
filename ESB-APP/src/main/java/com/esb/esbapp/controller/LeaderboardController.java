@@ -1,4 +1,4 @@
-package com.example.wattwise.controller;
+package com.esb.esbapp.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,6 +1,6 @@
-package com.example.wattwise.repository;
+package com.esb.esbapp.repository;
 
-import com.example.wattwise.entity.LeaderboardEntry;
+import com.esb.esbapp.model.LeaderboardEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

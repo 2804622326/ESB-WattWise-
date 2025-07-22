@@ -1,4 +1,4 @@
-package com.example.wattwise.entity;
+package com.esb.esbapp.model;
 
 /**
  * Leaderboard entry entity.
