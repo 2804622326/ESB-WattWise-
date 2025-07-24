@@ -53,12 +53,11 @@ public class TaskServiceImpl implements TaskService {
         }
         Task task = taskOpt.get();
         User user = userOpt.get();
-        TaskRecord record = TaskRecord.builder()
-                .userId(userId)
-                .taskId(taskId)
-                .completedDate(date)
-                .earnedPoints(task.getPoints())
-                .build();
+        TaskRecord record = new TaskRecord();
+        record.setUserId(userId);
+        record.setTaskId(taskId);
+        record.setCompletedDate(date);
+        record.setEarnedPoints(task.getPoints());
         taskRecordRepository.save(record);
         user.setTotalPoints(user.getTotalPoints() + task.getPoints());
         userRepository.save(user);

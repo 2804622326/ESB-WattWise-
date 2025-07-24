@@ -4,14 +4,8 @@ package com.esb.esbapp.model;
  * Reward item entity.
  */
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class RewardItem {
 
     @Id
@@ -26,4 +20,54 @@ public class RewardItem {
 
     private Integer stock;
 
+    public RewardItem() {
+    }
+
+    public RewardItem(Long id, String name, String description, Integer costPoints, Integer stock) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.costPoints = costPoints;
+        this.stock = stock;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getCostPoints() {
+        return costPoints;
+    }
+
+    public void setCostPoints(Integer costPoints) {
+        this.costPoints = costPoints;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 }

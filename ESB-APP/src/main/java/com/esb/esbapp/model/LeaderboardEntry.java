@@ -1,17 +1,10 @@
 package com.esb.esbapp.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 /**
  * Simple DTO representing a leaderboard entry.
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class LeaderboardEntry {
 
     private String userName;
@@ -20,4 +13,36 @@ public class LeaderboardEntry {
 
     private String communityId;
 
+    public LeaderboardEntry() {
+    }
+
+    public LeaderboardEntry(String userName, Integer score, String communityId) {
+        this.userName = userName;
+        this.score = score;
+        this.communityId = communityId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
 }

@@ -42,11 +42,13 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     public List<LeaderboardEntry> getOverallLeaderboard(String communityId) {
         List<User> users = userRepository.findTop10ByCommunityIdOrderByTotalPointsDesc(communityId);
         return users.stream()
-                .map(u -> LeaderboardEntry.builder()
-                        .userName(u.getName())
-                        .score(u.getTotalPoints())
-                        .communityId(u.getCommunityId())
-                        .build())
+                .map(u -> {
+                    LeaderboardEntry e = new LeaderboardEntry();
+                    e.setUserName(u.getName());
+                    e.setScore(u.getTotalPoints());
+                    e.setCommunityId(u.getCommunityId());
+                    return e;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -63,13 +65,13 @@ public class LeaderboardServiceImpl implements LeaderboardService {
         return scores.entrySet().stream()
                 .sorted(Map.Entry.<Long, Integer>comparingByValue().reversed())
                 .limit(10)
-                .map(e -> {
-                    User u = userRepository.findById(e.getKey()).orElseThrow();
-                    return LeaderboardEntry.builder()
-                            .userName(u.getName())
-                            .score(e.getValue())
-                            .communityId(u.getCommunityId())
-                            .build();
+                .map(entry -> {
+                    User u = userRepository.findById(entry.getKey()).orElseThrow();
+                    LeaderboardEntry dto = new LeaderboardEntry();
+                    dto.setUserName(u.getName());
+                    dto.setScore(entry.getValue());
+                    dto.setCommunityId(u.getCommunityId());
+                    return dto;
                 })
                 .collect(Collectors.toList());
     }
