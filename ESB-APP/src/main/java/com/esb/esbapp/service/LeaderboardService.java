@@ -1,11 +1,11 @@
 package com.esb.esbapp.service;
 
-import com.esb.esbapp.model.LeaderboardEntry;
+import com.esb.esbapp.model.User;
 
 import java.util.List;
 
 public interface LeaderboardService {
-    List<LeaderboardEntry> getDailyLeaderboard(String communityId);
-    List<LeaderboardEntry> getWeeklyLeaderboard(String communityId);
-    List<LeaderboardEntry> getOverallLeaderboard(String communityId);
+    List<User> getDailyLeaderboard(Long userId);
+    List<User> getWeeklyLeaderboard(Long userId);
+    List<User> getOverallLeaderboard(Long userId);
 }

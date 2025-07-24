@@ -5,5 +5,5 @@ import com.esb.esbapp.dto.UserSummaryDTO;
 
 public interface HomeService {
     UserSummaryDTO getUserSummary(Long userId);
-    CommunitySummaryDTO getCommunitySummary(String communityId);
+    CommunitySummaryDTO getCommunitySummary();
 }

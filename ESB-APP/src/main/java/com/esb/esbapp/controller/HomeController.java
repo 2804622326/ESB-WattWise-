@@ -23,8 +23,8 @@ public class HomeController {
         return homeService.getUserSummary(userId);
     }
 
-    @GetMapping("/community-summary/{communityId}")
-    public CommunitySummaryDTO getCommunitySummary(@PathVariable String communityId) {
-        return homeService.getCommunitySummary(communityId);
+    @GetMapping("/community-summary")
+    public CommunitySummaryDTO getCommunitySummary() {
+        return homeService.getCommunitySummary();
     }
 }

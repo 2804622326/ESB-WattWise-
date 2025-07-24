@@ -28,15 +28,14 @@ public class RewardServiceImpl implements RewardService {
 
     @Override
     @Transactional
-    public void redeem(Long userId, Long rewardItemId) {
+    public boolean redeem(Long userId, Long rewardItemId) {
         RewardItem item = rewardItemRepository.findById(rewardItemId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
-        if (item == null || user == null || item.getStock() <= 0 || user.getTotalPoints() < item.getCostPoints()) {
-            return;
+        if (item == null || user == null || user.getTotalPoints() < item.getCostPoints()) {
+            return false;
         }
-        item.setStock(item.getStock() - 1);
         user.setTotalPoints(user.getTotalPoints() - item.getCostPoints());
-        rewardItemRepository.save(item);
         userRepository.save(user);
+        return true;
     }
 }

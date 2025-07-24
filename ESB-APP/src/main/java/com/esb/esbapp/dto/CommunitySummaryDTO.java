@@ -1,35 +1,17 @@
 package com.esb.esbapp.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
-import java.time.LocalDate;
-import java.util.Map;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommunitySummaryDTO {
-    private Integer monthAveragePoints;
-    private Map<LocalDate, Integer> weeklyAveragePoints;
-
-    public CommunitySummaryDTO() {
-    }
-
-    public CommunitySummaryDTO(Integer monthAveragePoints, Map<LocalDate, Integer> weeklyAveragePoints) {
-        this.monthAveragePoints = monthAveragePoints;
-        this.weeklyAveragePoints = weeklyAveragePoints;
-    }
-
-    public Integer getMonthAveragePoints() {
-        return monthAveragePoints;
-    }
-
-    public void setMonthAveragePoints(Integer monthAveragePoints) {
-        this.monthAveragePoints = monthAveragePoints;
-    }
-
-    public Map<LocalDate, Integer> getWeeklyAveragePoints() {
-        return weeklyAveragePoints;
-    }
-
-    public void setWeeklyAveragePoints(Map<LocalDate, Integer> weeklyAveragePoints) {
-        this.weeklyAveragePoints = weeklyAveragePoints;
-    }
+    private int averageDailyPoints;
+    private int averageWeeklyPoints;
+    private int averageTotalPoints;
+    private double averageDailyEnergy;
+    private double averageWeeklyEnergy;
+    private double averageMonthlyEnergy;
 }

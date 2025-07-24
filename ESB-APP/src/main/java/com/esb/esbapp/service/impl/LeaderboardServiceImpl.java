@@ -1,78 +1,50 @@
 package com.esb.esbapp.service.impl;
 
-import com.esb.esbapp.model.LeaderboardEntry;
-import com.esb.esbapp.model.TaskRecord;
 import com.esb.esbapp.model.User;
-import com.esb.esbapp.repository.TaskRecordRepository;
 import com.esb.esbapp.repository.UserRepository;
 import com.esb.esbapp.service.LeaderboardService;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LeaderboardServiceImpl implements LeaderboardService {
 
     private final UserRepository userRepository;
-    private final TaskRecordRepository taskRecordRepository;
 
-    public LeaderboardServiceImpl(UserRepository userRepository, TaskRecordRepository taskRecordRepository) {
+    public LeaderboardServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.taskRecordRepository = taskRecordRepository;
     }
 
     @Override
-    public List<LeaderboardEntry> getDailyLeaderboard(String communityId) {
-        LocalDate today = LocalDate.now();
-        return buildLeaderboard(communityId, today, today);
+    public List<User> getDailyLeaderboard(Long userId) {
+        List<User> list = userRepository.findTop10ByOrderByDailyPointsDesc();
+        return prependUser(list, userId);
     }
 
     @Override
-    public List<LeaderboardEntry> getWeeklyLeaderboard(String communityId) {
-        LocalDate now = LocalDate.now();
-        LocalDate start = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        return buildLeaderboard(communityId, start, now);
+    public List<User> getWeeklyLeaderboard(Long userId) {
+        List<User> list = userRepository.findTop10ByOrderByWeeklyPointsDesc();
+        return prependUser(list, userId);
     }
 
     @Override
-    public List<LeaderboardEntry> getOverallLeaderboard(String communityId) {
-        List<User> users = userRepository.findTop10ByCommunityIdOrderByTotalPointsDesc(communityId);
-        return users.stream()
-                .map(u -> {
-                    LeaderboardEntry e = new LeaderboardEntry();
-                    e.setUserName(u.getName());
-                    e.setScore(u.getTotalPoints());
-                    e.setCommunityId(u.getCommunityId());
-                    return e;
-                })
-                .collect(Collectors.toList());
+    public List<User> getOverallLeaderboard(Long userId) {
+        List<User> list = userRepository.findTop10ByOrderByTotalPointsDesc();
+        return prependUser(list, userId);
     }
 
-    private List<LeaderboardEntry> buildLeaderboard(String communityId, LocalDate start, LocalDate end) {
-        List<User> users = userRepository.findByCommunityId(communityId);
-        Map<Long, Integer> scores = new HashMap<>();
-        for (User user : users) {
-            List<TaskRecord> records = taskRecordRepository.findByUserIdAndCompletedDateBetween(user.getId(), start, end);
-            int total = records.stream().mapToInt(TaskRecord::getEarnedPoints).sum();
-            if (total > 0) {
-                scores.put(user.getId(), total);
-            }
+    private List<User> prependUser(List<User> list, Long userId) {
+        if (userId == null) {
+            return list;
         }
-        return scores.entrySet().stream()
-                .sorted(Map.Entry.<Long, Integer>comparingByValue().reversed())
-                .limit(10)
-                .map(entry -> {
-                    User u = userRepository.findById(entry.getKey()).orElseThrow();
-                    LeaderboardEntry dto = new LeaderboardEntry();
-                    dto.setUserName(u.getName());
-                    dto.setScore(entry.getValue());
-                    dto.setCommunityId(u.getCommunityId());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            list.removeIf(u -> u.getId().equals(userId));
+            list.add(0, user);
+        }
+        return list;
     }
 }

@@ -2,83 +2,69 @@ package com.esb.esbapp.service.impl;
 
 import com.esb.esbapp.dto.CommunitySummaryDTO;
 import com.esb.esbapp.dto.UserSummaryDTO;
-import com.esb.esbapp.model.TaskRecord;
 import com.esb.esbapp.model.User;
-import com.esb.esbapp.repository.TaskRecordRepository;
 import com.esb.esbapp.repository.UserRepository;
 import com.esb.esbapp.service.HomeService;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class HomeServiceImpl implements HomeService {
 
-    private final TaskRecordRepository taskRecordRepository;
     private final UserRepository userRepository;
 
-    public HomeServiceImpl(TaskRecordRepository taskRecordRepository, UserRepository userRepository) {
-        this.taskRecordRepository = taskRecordRepository;
+    public HomeServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserSummaryDTO getUserSummary(Long userId) {
-        LocalDate now = LocalDate.now();
-        LocalDate monthStart = now.withDayOfMonth(1);
-        LocalDate weekStart = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-
-        List<TaskRecord> monthRecords = taskRecordRepository.findByUserIdAndCompletedDateBetween(userId, monthStart, now);
-        int monthPoints = monthRecords.stream().mapToInt(TaskRecord::getEarnedPoints).sum();
-
-        Map<LocalDate, Integer> weekly = new HashMap<>();
-        LocalDate day = weekStart;
-        while (!day.isAfter(now)) {
-            int points = taskRecordRepository.findByUserIdAndCompletedDate(userId, day)
-                    .stream()
-                    .mapToInt(TaskRecord::getEarnedPoints)
-                    .sum();
-            weekly.put(day, points);
-            day = day.plusDays(1);
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return null;
         }
-
-        return new UserSummaryDTO(monthPoints, weekly);
+        return new UserSummaryDTO(
+                user.getDailyPoints(),
+                user.getWeeklyPoints(),
+                user.getTotalPoints(),
+                user.getDailyEnergy(),
+                user.getWeeklyEnergy(),
+                user.getMonthlyEnergy()
+        );
     }
 
     @Override
-    public CommunitySummaryDTO getCommunitySummary(String communityId) {
-        LocalDate now = LocalDate.now();
-        LocalDate monthStart = now.withDayOfMonth(1);
-        LocalDate weekStart = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-
-        List<User> users = userRepository.findByCommunityId(communityId);
+    public CommunitySummaryDTO getCommunitySummary() {
+        List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
-            return new CommunitySummaryDTO(0, Map.of());
+            return new CommunitySummaryDTO(0,0,0,0,0,0);
         }
 
-        int monthTotal = 0;
-        Map<LocalDate, Integer> weeklyTotal = new HashMap<>();
-        for (User user : users) {
-            List<TaskRecord> monthRecords = taskRecordRepository.findByUserIdAndCompletedDateBetween(user.getId(), monthStart, now);
-            monthTotal += monthRecords.stream().mapToInt(TaskRecord::getEarnedPoints).sum();
-        }
-        for (LocalDate d = weekStart; !d.isAfter(now); d = d.plusDays(1)) {
-            int dayTotal = 0;
-            for (User user : users) {
-                dayTotal += taskRecordRepository.findByUserIdAndCompletedDate(user.getId(), d)
-                        .stream()
-                        .mapToInt(TaskRecord::getEarnedPoints)
-                        .sum();
-            }
-            weeklyTotal.put(d, dayTotal / users.size());
+        int dailyPointsSum = 0;
+        int weeklyPointsSum = 0;
+        int totalPointsSum = 0;
+        double dailyEnergySum = 0;
+        double weeklyEnergySum = 0;
+        double monthlyEnergySum = 0;
+
+        for (User u : users) {
+            dailyPointsSum += u.getDailyPoints();
+            weeklyPointsSum += u.getWeeklyPoints();
+            totalPointsSum += u.getTotalPoints();
+            dailyEnergySum += u.getDailyEnergy();
+            weeklyEnergySum += u.getWeeklyEnergy();
+            monthlyEnergySum += u.getMonthlyEnergy();
         }
 
-        int monthAvg = monthTotal / users.size();
-        return new CommunitySummaryDTO(monthAvg, weeklyTotal);
+        int count = users.size();
+        return new CommunitySummaryDTO(
+                dailyPointsSum / count,
+                weeklyPointsSum / count,
+                totalPointsSum / count,
+                dailyEnergySum / count,
+                weeklyEnergySum / count,
+                monthlyEnergySum / count
+        );
     }
 }
