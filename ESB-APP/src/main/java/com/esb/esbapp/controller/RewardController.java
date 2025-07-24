@@ -1,10 +1,28 @@
 package com.esb.esbapp.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.esb.esbapp.model.RewardItem;
+import com.esb.esbapp.service.RewardService;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * REST controller for reward related endpoints.
- */
+import java.util.List;
+
 @RestController
+@RequestMapping("/api/rewards")
 public class RewardController {
+
+    private final RewardService rewardService;
+
+    public RewardController(RewardService rewardService) {
+        this.rewardService = rewardService;
+    }
+
+    @GetMapping("/")
+    public List<RewardItem> getRewards() {
+        return rewardService.getAllRewards();
+    }
+
+    @PostMapping("/redeem")
+    public void redeem(@RequestParam Long userId, @RequestParam Long rewardItemId) {
+        rewardService.redeem(userId, rewardItemId);
+    }
 }

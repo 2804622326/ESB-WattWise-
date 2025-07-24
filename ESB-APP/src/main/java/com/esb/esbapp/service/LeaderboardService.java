@@ -1,10 +1,11 @@
 package com.esb.esbapp.service;
 
-import org.springframework.stereotype.Service;
+import com.esb.esbapp.model.LeaderboardEntry;
 
-/**
- * Business logic for leaderboards.
- */
-@Service
-public class LeaderboardService {
+import java.util.List;
+
+public interface LeaderboardService {
+    List<LeaderboardEntry> getDailyLeaderboard(String communityId);
+    List<LeaderboardEntry> getWeeklyLeaderboard(String communityId);
+    List<LeaderboardEntry> getOverallLeaderboard(String communityId);
 }

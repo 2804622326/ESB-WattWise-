@@ -1,35 +1,23 @@
 package com.esb.esbapp.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
- * Leaderboard entry entity.
+ * Simple DTO representing a leaderboard entry.
  */
-
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDate;
-
-@Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class LeaderboardEntry {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String userName;
 
-    @ManyToOne
-    private User user;
+    private Integer score;
 
-    private int score; // 积分值（可以是当天、当周或全部）
-
-    private String type; // 排名类型：day、week、all
-
-    private LocalDate date; // 排行榜的时间节点（仅 day/week 用）
-
-    private String communityId; // 用于分组排名（例如 CORK-T23）
+    private String communityId;
 
 }

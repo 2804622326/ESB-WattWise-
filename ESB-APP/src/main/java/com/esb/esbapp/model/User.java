@@ -3,8 +3,6 @@ package com.esb.esbapp.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -20,21 +18,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    private String password;
+    private String communityId;
 
-    private String meterNumber;
-
-    private int totalPoints;
-
-    private Long communityId;
-
-    private LocalDateTime registeredAt;
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_challenges",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "challenge_id")
-    )
-    private List<Challenge> joinedChallenges;
+    private Integer totalPoints = 0;
 }

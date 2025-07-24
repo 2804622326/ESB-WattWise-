@@ -1,10 +1,10 @@
 package com.esb.esbapp.service;
 
-import org.springframework.stereotype.Service;
+import com.esb.esbapp.model.RewardItem;
 
-/**
- * Business logic for rewards.
- */
-@Service
-public class RewardService {
+import java.util.List;
+
+public interface RewardService {
+    List<RewardItem> getAllRewards();
+    void redeem(Long userId, Long rewardItemId);
 }

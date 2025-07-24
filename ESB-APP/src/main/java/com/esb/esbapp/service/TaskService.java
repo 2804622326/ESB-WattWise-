@@ -1,10 +1,15 @@
 package com.esb.esbapp.service;
 
-import org.springframework.stereotype.Service;
+import com.esb.esbapp.model.Task;
+import com.esb.esbapp.model.TaskRecord;
 
-/**
- * Business logic for tasks.
- */
-@Service
-public class TaskService {
+import java.time.LocalDate;
+import java.util.List;
+
+public interface TaskService {
+    List<Task> getTasks(String category, Boolean enabled);
+
+    List<TaskRecord> getCompletedTasks(Long userId, LocalDate date);
+
+    void completeTask(Long userId, Long taskId, LocalDate date);
 }

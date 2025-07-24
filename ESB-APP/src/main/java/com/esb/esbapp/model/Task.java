@@ -16,13 +16,9 @@ public class Task {
 
     private String description;
 
-    private int pointValue;
+    private String category;
 
-    private boolean imageRequired;
+    private Integer points;
 
-    private boolean isActive;
-
-    @ManyToOne
-    @JoinColumn(name = "challenge_id")
-    private Challenge challenge;
+    private Boolean enabled = true;
 }
