@@ -18,7 +18,8 @@ public class Task {
 
     private String category;
 
-    private Integer points;
+    // rewardPoints specifies the points gained when completing the task
+    private Integer rewardPoints;
 
     private Boolean enabled = true;
 
@@ -29,12 +30,12 @@ public class Task {
     public Task() {
     }
 
-    public Task(Long id, String title, String description, String category, Integer points, Boolean enabled) {
+    public Task(Long id, String title, String description, String category, Integer rewardPoints, Boolean enabled) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.category = category;
-        this.points = points;
+        this.rewardPoints = rewardPoints;
         this.enabled = enabled;
     }
 
@@ -70,12 +71,12 @@ public class Task {
         this.category = category;
     }
 
-    public Integer getPoints() {
-        return points;
+    public Integer getRewardPoints() {
+        return rewardPoints;
     }
 
-    public void setPoints(Integer points) {
-        this.points = points;
+    public void setRewardPoints(Integer rewardPoints) {
+        this.rewardPoints = rewardPoints;
     }
 
     public Boolean getEnabled() {

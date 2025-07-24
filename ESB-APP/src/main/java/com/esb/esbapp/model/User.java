@@ -15,14 +15,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    // Display name of the user
+    private String username;
 
-    @Column(unique = true)
-    private String email;
+    private String avatarUrl;
 
-    private String communityId;
+    private int dailyPoints;
+    private int weeklyPoints;
+    private int totalPoints;
 
-    private Integer totalPoints = 0;
+    private double dailyEnergy;
+    private double weeklyEnergy;
+    private double monthlyEnergy;
 
     @ManyToMany
     @JoinTable(name = "user_challenges",
@@ -33,11 +37,12 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String name, String email, String communityId, Integer totalPoints) {
+    public User(Long id, String username, String avatarUrl, int dailyPoints, int weeklyPoints, int totalPoints) {
         this.id = id;
-        this.name = name;
-        this.email = email;
-        this.communityId = communityId;
+        this.username = username;
+        this.avatarUrl = avatarUrl;
+        this.dailyPoints = dailyPoints;
+        this.weeklyPoints = weeklyPoints;
         this.totalPoints = totalPoints;
     }
 
@@ -49,36 +54,68 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
-    public String getCommunityId() {
-        return communityId;
+    public int getDailyPoints() {
+        return dailyPoints;
     }
 
-    public void setCommunityId(String communityId) {
-        this.communityId = communityId;
+    public void setDailyPoints(int dailyPoints) {
+        this.dailyPoints = dailyPoints;
     }
 
-    public Integer getTotalPoints() {
+    public int getWeeklyPoints() {
+        return weeklyPoints;
+    }
+
+    public void setWeeklyPoints(int weeklyPoints) {
+        this.weeklyPoints = weeklyPoints;
+    }
+
+    public int getTotalPoints() {
         return totalPoints;
     }
 
-    public void setTotalPoints(Integer totalPoints) {
+    public void setTotalPoints(int totalPoints) {
         this.totalPoints = totalPoints;
+    }
+
+    public double getDailyEnergy() {
+        return dailyEnergy;
+    }
+
+    public void setDailyEnergy(double dailyEnergy) {
+        this.dailyEnergy = dailyEnergy;
+    }
+
+    public double getWeeklyEnergy() {
+        return weeklyEnergy;
+    }
+
+    public void setWeeklyEnergy(double weeklyEnergy) {
+        this.weeklyEnergy = weeklyEnergy;
+    }
+
+    public double getMonthlyEnergy() {
+        return monthlyEnergy;
+    }
+
+    public void setMonthlyEnergy(double monthlyEnergy) {
+        this.monthlyEnergy = monthlyEnergy;
     }
 
     public List<Challenge> getJoinedChallenges() {

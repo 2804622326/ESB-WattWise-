@@ -1,9 +1,8 @@
 package com.esb.esbapp.controller;
 
-import com.esb.esbapp.model.LeaderboardEntry;
+import com.esb.esbapp.model.User;
 import com.esb.esbapp.service.LeaderboardService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,18 +18,18 @@ public class LeaderboardController {
         this.leaderboardService = leaderboardService;
     }
 
-    @GetMapping("/daily/{communityId}")
-    public List<LeaderboardEntry> daily(@PathVariable String communityId) {
-        return leaderboardService.getDailyLeaderboard(communityId);
+    @GetMapping("/daily")
+    public List<User> daily() {
+        return leaderboardService.getDailyLeaderboard();
     }
 
-    @GetMapping("/weekly/{communityId}")
-    public List<LeaderboardEntry> weekly(@PathVariable String communityId) {
-        return leaderboardService.getWeeklyLeaderboard(communityId);
+    @GetMapping("/weekly")
+    public List<User> weekly() {
+        return leaderboardService.getWeeklyLeaderboard();
     }
 
-    @GetMapping("/overall/{communityId}")
-    public List<LeaderboardEntry> overall(@PathVariable String communityId) {
-        return leaderboardService.getOverallLeaderboard(communityId);
+    @GetMapping("/all")
+    public List<User> overall() {
+        return leaderboardService.getOverallLeaderboard();
     }
 }

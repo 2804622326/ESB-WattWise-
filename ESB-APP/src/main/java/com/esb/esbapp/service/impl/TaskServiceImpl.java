@@ -39,27 +39,25 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskRecord> getCompletedTasks(Long userId, LocalDate date) {
-        return taskRecordRepository.findByUserIdAndCompletedDate(userId, date);
-    }
-
-    @Override
     @Transactional
-    public void completeTask(Long userId, Long taskId, LocalDate date) {
+    public User completeTask(Long userId, Long taskId) {
         Optional<Task> taskOpt = taskRepository.findById(taskId);
         Optional<User> userOpt = userRepository.findById(userId);
         if (taskOpt.isEmpty() || userOpt.isEmpty()) {
-            return;
+            return null;
         }
         Task task = taskOpt.get();
         User user = userOpt.get();
         TaskRecord record = new TaskRecord();
         record.setUserId(userId);
         record.setTaskId(taskId);
-        record.setCompletedDate(date);
-        record.setEarnedPoints(task.getPoints());
+        record.setCompletedDate(LocalDate.now());
+        record.setEarnedPoints(task.getRewardPoints());
         taskRecordRepository.save(record);
-        user.setTotalPoints(user.getTotalPoints() + task.getPoints());
+        user.setDailyPoints(user.getDailyPoints() + task.getRewardPoints());
+        user.setWeeklyPoints(user.getWeeklyPoints() + task.getRewardPoints());
+        user.setTotalPoints(user.getTotalPoints() + task.getRewardPoints());
         userRepository.save(user);
+        return user;
     }
 }

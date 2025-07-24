@@ -9,7 +9,9 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    List<User> findByCommunityId(String communityId);
+    List<User> findTop10ByOrderByDailyPointsDesc();
 
-    List<User> findTop10ByCommunityIdOrderByTotalPointsDesc(String communityId);
+    List<User> findTop10ByOrderByWeeklyPointsDesc();
+
+    List<User> findTop10ByOrderByTotalPointsDesc();
 }

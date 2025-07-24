@@ -18,16 +18,19 @@ public class RewardItem {
 
     private Integer costPoints;
 
+    private String imageUrl;
+
     private Integer stock;
 
     public RewardItem() {
     }
 
-    public RewardItem(Long id, String name, String description, Integer costPoints, Integer stock) {
+    public RewardItem(Long id, String name, String description, Integer costPoints, String imageUrl, Integer stock) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.costPoints = costPoints;
+        this.imageUrl = imageUrl;
         this.stock = stock;
     }
 
@@ -61,6 +64,14 @@ public class RewardItem {
 
     public void setCostPoints(Integer costPoints) {
         this.costPoints = costPoints;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Integer getStock() {
