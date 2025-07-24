@@ -2,17 +2,8 @@ package com.esb.esbapp.service;
 
 import com.esb.esbapp.model.Task;
 import java.util.List;
-import com.esb.esbapp.model.User;
 
 public interface TaskService {
-    List<Task> getTasks();
-
-    /**
-     * Mark a task as completed and update the user's points accordingly.
-     *
-     * @param userId id of the user
-     * @param taskId id of the task
-     * @return updated user or {@code null} if user/task not found
-     */
-    User completeTask(Long userId, Long taskId);
+    List<Task> getAllTasks();
+    Task getTaskById(Long id); // 可用于用户完成任务时复用
 }
