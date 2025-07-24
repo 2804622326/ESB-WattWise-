@@ -2,6 +2,8 @@ package com.esb.esbapp.model;
 
 import jakarta.persistence.*;
 
+import com.esb.esbapp.model.Challenge;
+
 @Entity
 @Table(name = "tasks")
 public class Task {
@@ -19,6 +21,10 @@ public class Task {
     private Integer points;
 
     private Boolean enabled = true;
+
+    @ManyToOne
+    @JoinColumn(name = "challenge_id")
+    private Challenge challenge;
 
     public Task() {
     }
@@ -78,5 +84,13 @@ public class Task {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Challenge getChallenge() {
+        return challenge;
+    }
+
+    public void setChallenge(Challenge challenge) {
+        this.challenge = challenge;
     }
 }

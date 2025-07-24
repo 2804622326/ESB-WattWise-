@@ -1,6 +1,9 @@
 package com.esb.esbapp.model;
 
 import jakarta.persistence.*;
+import java.util.List;
+
+import com.esb.esbapp.model.Challenge;
 
 
 
@@ -20,6 +23,12 @@ public class User {
     private String communityId;
 
     private Integer totalPoints = 0;
+
+    @ManyToMany
+    @JoinTable(name = "user_challenges",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "challenge_id"))
+    private List<Challenge> joinedChallenges;
 
     public User() {
     }
@@ -70,5 +79,13 @@ public class User {
 
     public void setTotalPoints(Integer totalPoints) {
         this.totalPoints = totalPoints;
+    }
+
+    public List<Challenge> getJoinedChallenges() {
+        return joinedChallenges;
+    }
+
+    public void setJoinedChallenges(List<Challenge> joinedChallenges) {
+        this.joinedChallenges = joinedChallenges;
     }
 }
