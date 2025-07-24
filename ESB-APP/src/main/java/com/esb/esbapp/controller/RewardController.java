@@ -16,13 +16,8 @@ public class RewardController {
         this.rewardService = rewardService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<RewardItem> getRewards() {
         return rewardService.getAllRewards();
-    }
-
-    @PostMapping("/redeem")
-    public void redeem(@RequestParam Long userId, @RequestParam Long rewardItemId) {
-        rewardService.redeem(userId, rewardItemId);
     }
 }
