@@ -1,4 +1,4 @@
-package com.esb.esbapp.service;
+package com.esb.esbapp.service.userService;
 
 import org.springframework.stereotype.Service;
 
