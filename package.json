@@ -1,0 +1,8 @@
+{
+  "name": "esb-wattwise-root",
+  "private": true,
+  "scripts": {
+    "install": "npm --prefix frontend install",
+    "start": "npm --prefix frontend start"
+  }
+}
