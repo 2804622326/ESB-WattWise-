@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class User {
 
@@ -24,4 +23,18 @@ public class User {
     private double dailyEnergy;
     private double weeklyEnergy;
     private double monthlyEnergy;
+
+    public User(Long id, String username, String avatarUrl,
+                int dailyPoints, int weeklyPoints, int totalPoints,
+                double dailyEnergy, double weeklyEnergy, double monthlyEnergy) {
+        this.id = id;
+        this.username = username;
+        this.avatarUrl = avatarUrl;
+        this.dailyPoints = dailyPoints;
+        this.weeklyPoints = weeklyPoints;
+        this.totalPoints = totalPoints;
+        this.dailyEnergy = dailyEnergy;
+        this.weeklyEnergy = weeklyEnergy;
+        this.monthlyEnergy = monthlyEnergy;
+    }
 }

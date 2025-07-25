@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class Task {
 
@@ -17,4 +16,11 @@ public class Task {
     private String title;
     private String description;
     private int rewardPoints;
+
+    public Task(Long id, String title, String description, int rewardPoints) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.rewardPoints = rewardPoints;
+    }
 }
