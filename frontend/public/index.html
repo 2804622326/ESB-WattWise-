@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Energy Saver Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        section { margin-bottom: 30px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        button { padding: 4px 10px; }
+    </style>
+</head>
+<body>
+<h1>Energy Saver Dashboard</h1>
+
+<section>
+    <h2>User Info</h2>
+    <label>User ID: <input type="number" id="userId" value="1" min="1" /></label>
+    <button onclick="loadAll()">Load Data</button>
+    <div id="user"></div>
+</section>
+
+<section>
+    <h2>Tasks</h2>
+    <table id="tasks"></table>
+</section>
+
+<section>
+    <h2>Rewards</h2>
+    <table id="rewards"></table>
+</section>
+
+<section>
+    <h2>Leaderboard</h2>
+    <select id="lbType" onchange="loadLeaderboard()">
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="all">Total</option>
+    </select>
+    <table id="leaderboard"></table>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
