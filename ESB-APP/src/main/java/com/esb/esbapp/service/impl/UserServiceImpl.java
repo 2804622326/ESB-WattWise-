@@ -7,19 +7,25 @@ import com.esb.esbapp.repository.UserRepository;
 import com.esb.esbapp.repository.TaskRepository;
 import com.esb.esbapp.repository.RewardItemRepository;
 import com.esb.esbapp.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final RewardItemRepository rewardItemRepository;
+
+    public UserServiceImpl(UserRepository userRepository,
+                           TaskRepository taskRepository,
+                           RewardItemRepository rewardItemRepository) {
+        this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
+        this.rewardItemRepository = rewardItemRepository;
+    }
 
     @Override
     public User getUserById(Long id) {

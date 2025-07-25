@@ -6,21 +6,26 @@ import com.esb.esbapp.model.RewardItem;
 import com.esb.esbapp.repository.UserRepository;
 import com.esb.esbapp.repository.TaskRepository;
 import com.esb.esbapp.repository.RewardItemRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.IntStream;
+
 
 @Component
-@RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final RewardItemRepository rewardItemRepository;
+
+    public DataSeeder(UserRepository userRepository,
+                      TaskRepository taskRepository,
+                      RewardItemRepository rewardItemRepository) {
+        this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
+        this.rewardItemRepository = rewardItemRepository;
+    }
 
     @Override
     public void run(String... args) {

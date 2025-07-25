@@ -3,16 +3,18 @@ package com.esb.esbapp.service.impl;
 import com.esb.esbapp.model.RewardItem;
 import com.esb.esbapp.repository.RewardItemRepository;
 import com.esb.esbapp.service.RewardService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class RewardServiceImpl implements RewardService {
 
     private final RewardItemRepository rewardItemRepository;
+
+    public RewardServiceImpl(RewardItemRepository rewardItemRepository) {
+        this.rewardItemRepository = rewardItemRepository;
+    }
 
     @Override
     public List<RewardItem> getAllRewards() {

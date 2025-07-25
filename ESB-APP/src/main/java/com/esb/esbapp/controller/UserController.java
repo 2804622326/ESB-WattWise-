@@ -2,17 +2,19 @@ package com.esb.esbapp.controller;
 
 import com.esb.esbapp.model.User;
 import com.esb.esbapp.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 获取用户信息（积分和能耗）
