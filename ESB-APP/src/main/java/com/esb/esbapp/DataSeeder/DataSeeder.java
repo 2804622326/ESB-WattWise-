@@ -6,21 +6,26 @@ import com.esb.esbapp.model.RewardItem;
 import com.esb.esbapp.repository.UserRepository;
 import com.esb.esbapp.repository.TaskRepository;
 import com.esb.esbapp.repository.RewardItemRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.IntStream;
+
 
 @Component
-@RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final RewardItemRepository rewardItemRepository;
+
+    public DataSeeder(UserRepository userRepository,
+                      TaskRepository taskRepository,
+                      RewardItemRepository rewardItemRepository) {
+        this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
+        this.rewardItemRepository = rewardItemRepository;
+    }
 
     @Override
     public void run(String... args) {
@@ -36,17 +41,22 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedUsers() {
+        // Adjusted users so that the top 3 have different ranks for daily, weekly, and total points
         List<User> users = List.of(
-                new User(null, "Viggo", "https://example.com/avatars/viggo1.png", 200, 0, 0, 3.5, 20.0, 60.0),
-                new User(null, "Lumi", "https://example.com/avatars/lumi.png", 180, 0, 0, 2.8, 18.0, 55.0),
-                new User(null, "Viggo", "https://example.com/avatars/viggo2.png", 120, 0, 0, 3.1, 19.0, 52.0),
-                new User(null, "Boden", "https://example.com/avatars/boden.png", 100, 0, 0, 2.0, 16.0, 50.0),
-                new User(null, "Jett", "https://example.com/avatars/jett.png", 95, 0, 0, 2.5, 15.0, 48.0),
-                new User(null, "Zara", "https://example.com/avatars/zara.png", 90, 0, 0, 2.4, 15.5, 47.0),
-                new User(null, "Gwen", "https://example.com/avatars/gwen.png", 80, 0, 0, 2.1, 14.0, 45.0),
-                new User(null, "James", "https://example.com/avatars/james.png", 40, 0, 0, 2.2, 13.0, 40.0),
-                new User(null, "Vivian", "https://example.com/avatars/vivian.png", 30, 0, 0, 1.9, 12.0, 38.0),
-                new User(null, "Theo", "https://example.com/avatars/theo.png", 30, 0, 0, 1.8, 11.0, 36.0)
+                // User 1: Highest daily, lowest weekly, mid total
+                new User(null, "Viggo", "https://example.com/avatars/viggo1.png", 300, 500, 600, 3.5, 20.0, 60.0),
+                // User 2: Mid daily, highest weekly, lowest total
+                new User(null, "Lumi", "https://example.com/avatars/lumi.png", 200, 600, 800, 2.8, 18.0, 55.0),
+                // User 3: Lowest daily, mid weekly, highest total
+                new User(null, "Viggo", "https://example.com/avatars/viggo2.png", 100, 250, 900, 3.1, 19.0, 52.0),
+                // The rest stay similar, but ensure no accidental tie in top 3
+                new User(null, "Boden", "https://example.com/avatars/boden.png", 80, 150, 300, 2.0, 16.0, 50.0),
+                new User(null, "Jett", "https://example.com/avatars/jett.png", 75, 140, 450, 2.5, 15.0, 48.0),
+                new User(null, "Zara", "https://example.com/avatars/zara.png", 70, 230, 420, 2.4, 15.5, 47.0),
+                new User(null, "Gwen", "https://example.com/avatars/gwen.png", 60, 120, 400, 2.1, 14.0, 45.0),
+                new User(null, "James", "https://example.com/avatars/james.png", 40, 260, 620, 2.2, 13.0, 40.0),
+                new User(null, "Vivian", "https://example.com/avatars/vivian.png", 30, 300, 250, 1.9, 12.0, 38.0),
+                new User(null, "Theo", "https://example.com/avatars/theo.png", 30, 160, 680, 1.8, 11.0, 36.0)
         );
         userRepository.saveAll(users);
         System.out.println("✅ Seeded 10 users.");
