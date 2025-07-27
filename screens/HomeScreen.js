@@ -22,30 +22,46 @@ import { Images } from '../assets';
 export default function HomeScreen() {
   const [mode, setMode] = useState('home');    // 'home' 或 'community'
   const [stats, setStats] = useState(null);
+  const [angles, setAngles] = useState({
+    frontStart: 0,
+    frontEnd: 180,
+    backStart: 180,
+    backEnd: 360,
+  });
   const animated = useRef(new Animated.Value(0)).current;
 
   // 当 mode 改变时拉取数据
   useEffect(() => {
     setStats(null);
     fetchEnergyStats(mode)
-      .then(data => setStats(data))
+      .then(data => {
+        setStats(data);
+        if (data && data.frontEnd !== undefined) {
+          setAngles({
+            frontStart: data.frontStart ?? 0,
+            frontEnd: data.frontEnd ?? 180,
+            backStart: data.backStart ?? 180,
+            backEnd: data.backEnd ?? 360,
+          });
+        }
+      })
       .catch(err => console.error(err));
   }, [mode]);
 
   // 翻转动画插值
   const frontInterpol = animated.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['0deg', '180deg'],
+    inputRange: [0, angles.frontEnd],
+    outputRange: [`${angles.frontStart}deg`, `${angles.frontEnd}deg`],
   });
   const backInterpol = animated.interpolate({
-    inputRange: [0, 180],
-    outputRange: ['180deg', '360deg'],
+    inputRange: [0, angles.backEnd],
+    outputRange: [`${angles.backStart}deg`, `${angles.backEnd}deg`],
   });
 
   // 执行动画并切换模式
   const flipCard = () => {
     Animated.spring(animated, {
-      toValue: mode === 'home' ? 180 : 0,
+      toValue: mode === 'home' ? angles.frontEnd : 0,
       friction: 8,
       tension: 10,
       useNativeDriver: true,
