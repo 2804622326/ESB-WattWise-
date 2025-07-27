@@ -24,13 +24,14 @@ export default function HomeScreen() {
   const [stats, setStats] = useState(null);
   const animated = useRef(new Animated.Value(0)).current;
 
-  // 当 mode 改变时拉取数据
-  useEffect(() => {
-    setStats(null);
-    fetchEnergyStats(mode)
-      .then(data => setStats(data))
-      .catch(err => console.error(err));
-  }, [mode]);
+const currentUserId = 1; // TODO: 替换为真实用户 ID
+
+useEffect(() => {
+  setStats(null);
+  fetchEnergyStats(mode, currentUserId)
+    .then(data => setStats(data))
+    .catch(err => console.error(err));
+}, [mode]);
 
   // 翻转动画插值
   const frontInterpol = animated.interpolate({
