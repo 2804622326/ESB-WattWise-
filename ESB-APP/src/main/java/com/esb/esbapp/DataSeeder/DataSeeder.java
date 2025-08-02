@@ -44,19 +44,29 @@ public class DataSeeder implements CommandLineRunner {
         // Adjusted users so that the top 3 have different ranks for daily, weekly, and total points
         List<User> users = List.of(
                 // User 1: Highest daily, lowest weekly, mid total
-                new User(null, "Viggo", "https://example.com/avatars/viggo1.png", 300, 500, 600, 3.5, 20.0, 60.0),
+                new User(null, "Viggo", 300, 500, 600, 3.5, 20.0, 60.0,
+                        "https://randomuser.me/api/portraits/men/32.jpg"),
                 // User 2: Mid daily, highest weekly, lowest total
-                new User(null, "Lumi", "https://example.com/avatars/lumi.png", 200, 600, 800, 2.8, 18.0, 55.0),
+                new User(null, "Lumi", 200, 600, 800, 2.8, 18.0, 55.0,
+                        "https://randomuser.me/api/portraits/women/44.jpg"),
                 // User 3: Lowest daily, mid weekly, highest total
-                new User(null, "Viggo", "https://example.com/avatars/viggo2.png", 100, 250, 900, 3.1, 19.0, 52.0),
+                new User(null, "Axel", 100, 250, 900, 3.1, 19.0, 52.0,
+                        "https://randomuser.me/api/portraits/men/85.jpg"),
                 // The rest stay similar, but ensure no accidental tie in top 3
-                new User(null, "Boden", "https://example.com/avatars/boden.png", 80, 150, 300, 2.0, 16.0, 50.0),
-                new User(null, "Jett", "https://example.com/avatars/jett.png", 75, 140, 450, 2.5, 15.0, 48.0),
-                new User(null, "Zara", "https://example.com/avatars/zara.png", 70, 230, 420, 2.4, 15.5, 47.0),
-                new User(null, "Gwen", "https://example.com/avatars/gwen.png", 60, 120, 400, 2.1, 14.0, 45.0),
-                new User(null, "James", "https://example.com/avatars/james.png", 40, 260, 620, 2.2, 13.0, 40.0),
-                new User(null, "Vivian", "https://example.com/avatars/vivian.png", 30, 300, 250, 1.9, 12.0, 38.0),
-                new User(null, "Theo", "https://example.com/avatars/theo.png", 30, 160, 680, 1.8, 11.0, 36.0)
+                new User(null, "Boden", 80, 150, 300, 2.0, 16.0, 50.0,
+                        "https://randomuser.me/api/portraits/men/12.jpg"),
+                new User(null, "Jett", 75, 140, 450, 2.5, 15.0, 48.0,
+                        "https://randomuser.me/api/portraits/men/45.jpg"),
+                new User(null, "Zara", 70, 230, 420, 2.4, 15.5, 47.0,
+                        "https://randomuser.me/api/portraits/women/65.jpg"),
+                new User(null, "Gwen", 60, 120, 400, 2.1, 14.0, 45.0,
+                        "https://randomuser.me/api/portraits/women/18.jpg"),
+                new User(null, "James", 40, 260, 620, 2.2, 13.0, 40.0,
+                        "https://randomuser.me/api/portraits/men/78.jpg"),
+                new User(null, "Vivian", 30, 300, 250, 1.9, 12.0, 38.0,
+                        "https://randomuser.me/api/portraits/women/85.jpg"),
+                new User(null, "Theo", 30, 160, 680, 1.8, 11.0, 36.0,
+                        "https://randomuser.me/api/portraits/men/5.jpg")
         );
         userRepository.saveAll(users);
         System.out.println("✅ Seeded 10 users.");
@@ -77,12 +87,18 @@ public class DataSeeder implements CommandLineRunner {
 
     private void seedRewards() {
         List<RewardItem> rewards = List.of(
-                new RewardItem(null, "Electricity Deduction Voucher €5", "€5 off your next electricity bill", 450, "https://example.com/images/electricity-5.png"),
-                new RewardItem(null, "Smart Meter", "Track your energy usage", 1200, "https://example.com/images/smart-meter.png"),
-                new RewardItem(null, "Supermarket Voucher €5", "Valid in major stores", 500, "https://example.com/images/supermarket.png"),
-                new RewardItem(null, "Electricity Deduction Voucher €1", "€1 off electricity bill", 100, "https://example.com/images/electricity-1.png"),
-                new RewardItem(null, "Mini Plant Planting Set", "Grow your own herbs or flowers", 400, "https://example.com/images/plant.png"),
-                new RewardItem(null, "Community Sharing Tool Voucher", "Borrow tools from community center", 300, "https://example.com/images/tools.png")
+                new RewardItem(null, "Electricity Deduction Voucher €5", "€5 off your next electricity bill", 450,
+                        "https://via.placeholder.com/150?text=Electricity+5"),
+                new RewardItem(null, "Smart Meter", "Track your energy usage", 1200,
+                        "https://via.placeholder.com/150?text=Smart+Meter"),
+                new RewardItem(null, "Supermarket Voucher €5", "Valid in major stores", 500,
+                        "https://via.placeholder.com/150?text=Voucher+5"),
+                new RewardItem(null, "Electricity Deduction Voucher €1", "€1 off electricity bill", 100,
+                        "https://via.placeholder.com/150?text=Electricity+1"),
+                new RewardItem(null, "Mini Plant Planting Set", "Grow your own herbs or flowers", 400,
+                        "https://via.placeholder.com/150?text=Plant+Set"),
+                new RewardItem(null, "Community Sharing Tool Voucher", "Borrow tools from community center", 300,
+                        "https://via.placeholder.com/150?text=Tool+Voucher")
         );
         rewardItemRepository.saveAll(rewards);
         System.out.println("✅ Seeded 6 reward items.");

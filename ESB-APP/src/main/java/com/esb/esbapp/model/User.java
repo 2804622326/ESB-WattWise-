@@ -11,7 +11,6 @@ public class User {
     private Long id;
 
     private String username;
-    private String avatarUrl;
 
     private int dailyPoints;
     private int weeklyPoints;
@@ -21,21 +20,24 @@ public class User {
     private double weeklyEnergy;
     private double monthlyEnergy;
 
+    private String imageUrl;
+
     public User() {
     }
 
-    public User(Long id, String username, String avatarUrl,
+    public User(Long id, String username,
                 int dailyPoints, int weeklyPoints, int totalPoints,
-                double dailyEnergy, double weeklyEnergy, double monthlyEnergy) {
+                double dailyEnergy, double weeklyEnergy, double monthlyEnergy,
+                String imageUrl) {
         this.id = id;
         this.username = username;
-        this.avatarUrl = avatarUrl;
         this.dailyPoints = dailyPoints;
         this.weeklyPoints = weeklyPoints;
         this.totalPoints = totalPoints;
         this.dailyEnergy = dailyEnergy;
         this.weeklyEnergy = weeklyEnergy;
         this.monthlyEnergy = monthlyEnergy;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -52,14 +54,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
     }
 
     public int getDailyPoints() {
@@ -108,5 +102,13 @@ public class User {
 
     public void setMonthlyEnergy(double monthlyEnergy) {
         this.monthlyEnergy = monthlyEnergy;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
