@@ -15,8 +15,7 @@ import {
 
 import { BlurView } from 'expo-blur';
 
-// Temporarily use local mock data instead of calling the backend
-import { energyStats } from '../constants/mockStats';
+import { fetchEnergyStats } from '../service/api';
 import { Images } from '../assets';
 
 export default function DashboardScreen() {
@@ -26,9 +25,16 @@ export default function DashboardScreen() {
   const isWeb = Platform.OS === 'web';
   const Container = isWeb ? ScrollView : View;
 
-// For demo purposes, switch stats based on the selected mode without API calls
 useEffect(() => {
-  setStats(energyStats[mode]);
+  const load = async () => {
+    try {
+      const data = await fetchEnergyStats(mode, 1);
+      setStats(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  load();
 }, [mode]);
 
   // 翻转动画插值

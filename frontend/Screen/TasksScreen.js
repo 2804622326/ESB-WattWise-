@@ -1,5 +1,5 @@
 // TasksScreen.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,38 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { taskList } from '../constants/mockTasks';
 import TaskCard from '../components/TaskCard';
+import { fetchTasks } from '../service/api';
 
 export default function TasksScreen() {
   const navigation = useNavigation();
-  const [tasks, setTasks] = useState(taskList);
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await fetchTasks();
+        const iconMap = {
+          1: require('../assets/Task/t1.png'),
+          2: require('../assets/Task/t2.png'),
+          3: require('../assets/Task/t3.png'),
+          4: require('../assets/Task/t4.png'),
+          5: require('../assets/Task/t5.png'),
+        };
+        setTasks(
+          data.map((t) => ({
+            ...t,
+            points: t.rewardPoints,
+            icon: iconMap[t.id] || null,
+            completed: false,
+          }))
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    load();
+  }, []);
 
   // 按“索引”完成，避免重复 id 影响到多条
   const handleCompleteAt = (index) => {

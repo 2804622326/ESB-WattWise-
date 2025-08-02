@@ -1,5 +1,5 @@
 // LeaderboardScreen.js
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { currentUser, leaderboardUsers } from '../constants/mockUsers';
 import { PointsContext } from '../context/PointsContext';
+import { fetchLeaderboard } from '../service/api';
 
 // 阶段 0、1 用同一张图片；阶段 2 用满分图片
 const CARD_IMAGES = [
@@ -28,13 +28,13 @@ const DEFAULT_AVATAR = require('../assets/Lead/Head.png');
 const COMMUNITY_ICON = require('../assets/Lead/map-pin.png');
 
 export default function LeaderboardScreen() {
-  // 来自全局上下文的积分与任务进度
   const { points, taskProgress } = useContext(PointsContext);
-  const [cardH, setCardH] = useState(0); // 记录卡片实际高度以定位按钮
+  const [cardH, setCardH] = useState(0);
   const navigation = useNavigation();
 
-  // 排行榜顶部选项卡，可在 Day/Week/All 间切换
   const [selectedTab, setSelectedTab] = useState('Day');
+  const [listData, setListData] = useState([]);
+  const COMMUNITY_NAME = 'UCC Community';
 
   const isFull = taskProgress >= 2;
 
@@ -42,16 +42,26 @@ export default function LeaderboardScreen() {
     navigation.navigate('Tasks');
   };
 
-  // 根据选中的时间范围切换分数和排名
   const pointsField =
     selectedTab === 'Day'
       ? 'dailyPoints'
       : selectedTab === 'Week'
       ? 'weeklyPoints'
       : 'totalPoints';
-  const listData = [currentUser, ...leaderboardUsers]
-    .slice(0, 10)
-    .sort((a, b) => (b[pointsField] || 0) - (a[pointsField] || 0));
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const range =
+          selectedTab === 'Day' ? 'daily' : selectedTab === 'Week' ? 'weekly' : 'all';
+        const data = await fetchLeaderboard(1, range);
+        setListData(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    load();
+  }, [selectedTab]);
 
   return (
     <ImageBackground
@@ -65,7 +75,7 @@ export default function LeaderboardScreen() {
           {/* 图片 + 文本：社区行 */}
           <View style={styles.communityRow}>
             <Image source={COMMUNITY_ICON} style={styles.communityIcon} />
-            <Text style={styles.communityText}>{currentUser.community}</Text>
+            <Text style={styles.communityText}>{COMMUNITY_NAME}</Text>
           </View>
 
           <View style={styles.pointRow}>
@@ -140,14 +150,14 @@ export default function LeaderboardScreen() {
           {listData.map((user, index) => {
             const avatarSource = user.avatarUrl
               ? { uri: user.avatarUrl }
-              : DEFAULT_AVATAR; // 没有 url 就用占位图
+              : DEFAULT_AVATAR;
 
             return (
               <View
                 key={index}
                 style={[
                   styles.userCard,
-                  user.username?.includes?.('(Myself)') && styles.highlightCard,
+                  user.id === 1 && styles.highlightCard,
                 ]}
               >
                 <Text style={styles.rank}>{index + 1}</Text>

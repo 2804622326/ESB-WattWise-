@@ -1,6 +1,7 @@
 package com.esb.esbapp.controller;
 
 import com.esb.esbapp.model.User;
+import com.esb.esbapp.dto.UserSummaryDTO;
 import com.esb.esbapp.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,22 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
+    }
+
+    /**
+     * 用户能耗与积分概要
+     */
+    @GetMapping("/{id}/summary")
+    public UserSummaryDTO getUserSummary(@PathVariable Long id) {
+        return userService.getUserSummary(id);
+    }
+
+    /**
+     * 社区平均能耗与积分概要
+     */
+    @GetMapping("/community-summary")
+    public UserSummaryDTO getCommunitySummary() {
+        return userService.getCommunitySummary();
     }
 
     /**

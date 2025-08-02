@@ -1,6 +1,7 @@
 package com.esb.esbapp.service;
 
 import com.esb.esbapp.model.User;
+import com.esb.esbapp.dto.UserSummaryDTO;
 
 import java.util.List;
 
@@ -19,4 +20,8 @@ public interface UserService {
     String redeemReward(Long userId, Long rewardItemId);
 
     List<User> getAllUsers();
+
+    UserSummaryDTO getUserSummary(Long userId);
+
+    UserSummaryDTO getCommunitySummary();
 }
