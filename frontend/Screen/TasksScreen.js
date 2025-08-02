@@ -1,0 +1,162 @@
+// TasksScreen.js
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  ImageBackground,
+  Platform,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import TaskCard from '../components/TaskCard';
+import { fetchTasks } from '../service/api';
+
+const TASK_ICONS = [
+  require('../assets/Task/t1.png'),
+  require('../assets/Task/t2.png'),
+  require('../assets/Task/t3.png'),
+  require('../assets/Task/t4.png'),
+  require('../assets/Task/t5.png'),
+];
+
+export default function TasksScreen() {
+  const navigation = useNavigation();
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    fetchTasks()
+      .then((data) => {
+        const withIcons = data.map((t, idx) => ({
+          ...t,
+          points: t.rewardPoints,
+          icon: TASK_ICONS[idx % TASK_ICONS.length],
+          completed: false,
+        }));
+        setTasks(withIcons);
+      })
+      .catch(() => setTasks([]));
+  }, []);
+
+  // Complete task by "index" to avoid duplicate IDs affecting multiple items
+  const handleCompleteAt = (index) => {
+    setTasks((prev) =>
+      prev.map((t, i) => {
+        if (i === index && !t.completed) {
+          return { ...t, completed: true };
+        }
+        return t;
+      })
+    );
+  };
+
+  const handlePressTask = (task, index) => {
+    navigation.navigate('TaskDetail', {
+      task,
+      onComplete: () => handleCompleteAt(index),
+    });
+  };
+
+  // Filter out undefined/null/non-object items
+  const safeTasks = Array.isArray(tasks)
+    ? tasks.filter((t) => t && typeof t === 'object')
+    : [];
+
+  return (
+    <ImageBackground
+      source={require('../assets/Lead/bg.png')}
+      style={[styles.screenBg, Platform.OS === 'web' && styles.screenBgWeb]}
+      imageStyle={styles.screenBgImage}
+    >
+      <View style={styles.screen}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={styles.backBtn}
+          >
+            <Text style={styles.backText}>‹</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.title}>Task List</Text>
+
+          <View style={styles.rightPlaceHolder} />
+        </View>
+
+        {/* List */}
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={{ paddingBottom: 32 }}
+        >
+          {safeTasks.map((task, index) => (
+            <TaskCard
+              key={task.id ?? `idx-${index}`}
+              task={task}
+              onComplete={() => handlePressTask(task, index)}
+              containerStyle={styles.cardSpacing}
+              glass={true}
+            />
+          ))}
+        </ScrollView>
+      </View>
+    </ImageBackground>
+  );
+}
+
+const styles = StyleSheet.create({
+  screenBg: { flex: 1 },
+  screenBgWeb: { width: '100%', height: '100%' },
+  screenBgImage: { resizeMode: 'cover' },
+
+  screen: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    ...(Platform.OS === 'web' && { width: '100%', maxWidth: 480, alignSelf: 'center' }),
+  },
+
+  /* Header */
+  header: {
+    height: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+  },
+  backBtn: {
+    position: 'absolute',
+    left: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backText: {
+    fontSize: 28,
+    lineHeight: 28,
+    color: '#111',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#111',
+  },
+  rightPlaceHolder: {
+    position: 'absolute',
+    right: 16,
+    width: 40,
+    height: 40,
+  },
+
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    ...(Platform.OS === 'web' && { width: '100%', maxWidth: 480, alignSelf: 'center' }),
+  },
+
+  cardSpacing: {
+    marginVertical: 10,
+  },
+});
