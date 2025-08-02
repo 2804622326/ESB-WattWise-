@@ -1,5 +1,7 @@
 package com.esb.esbapp.controller;
 
+import com.esb.esbapp.dto.CommunitySummaryDTO;
+import com.esb.esbapp.dto.UserSummaryDTO;
 import com.esb.esbapp.model.User;
 import com.esb.esbapp.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,11 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/{id}/summary")
+    public UserSummaryDTO getUserSummary(@PathVariable Long id) {
+        return userService.getUserSummary(id);
     }
 
     /**
@@ -67,6 +74,11 @@ public class UserController {
     @GetMapping("/all")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/community-summary")
+    public CommunitySummaryDTO getCommunitySummary() {
+        return userService.getCommunitySummary();
     }
 
 }

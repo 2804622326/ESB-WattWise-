@@ -1,5 +1,5 @@
 // TasksScreen.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,39 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { taskList } from '../constants/mockTasks';
+import { fetchTasks } from '../service/api';
 import TaskCard from '../components/TaskCard';
 
 export default function TasksScreen() {
   const navigation = useNavigation();
-  const [tasks, setTasks] = useState(taskList);
+  const [tasks, setTasks] = useState([]);
+  const icons = [
+    require('../assets/Task/t1.png'),
+    require('../assets/Task/t2.png'),
+    require('../assets/Task/t3.png'),
+    require('../assets/Task/t4.png'),
+    require('../assets/Task/t5.png'),
+  ];
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const data = await fetchTasks();
+        const mapped = data.map((t, i) => ({
+          id: t.id,
+          title: t.title,
+          description: t.description,
+          points: t.rewardPoints,
+          completed: false,
+          icon: icons[i % icons.length],
+        }));
+        setTasks(mapped);
+      } catch (e) {
+        console.error('Failed to fetch tasks', e);
+      }
+    };
+    loadTasks();
+  }, []);
 
   // 按“索引”完成，避免重复 id 影响到多条
   const handleCompleteAt = (index) => {

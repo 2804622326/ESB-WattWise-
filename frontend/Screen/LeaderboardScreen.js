@@ -1,5 +1,5 @@
 // LeaderboardScreen.js
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,9 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { currentUser, leaderboardUsers } from '../constants/mockUsers';
+import { BASE_URL } from '../config';
 import { PointsContext } from '../context/PointsContext';
+import { leaderboardUsers } from '../constants/mockUsers';
 
 // 阶段 0、1 用同一张图片；阶段 2 用满分图片
 const CARD_IMAGES = [
@@ -35,6 +36,8 @@ export default function LeaderboardScreen() {
 
   // 排行榜顶部选项卡，可在 Day/Week/All 间切换
   const [selectedTab, setSelectedTab] = useState('Day');
+  const [listData, setListData] = useState([]);
+  const userId = 1;
 
   const isFull = taskProgress >= 2;
 
@@ -49,9 +52,27 @@ export default function LeaderboardScreen() {
       : selectedTab === 'Week'
       ? 'weeklyPoints'
       : 'totalPoints';
-  const listData = [currentUser, ...leaderboardUsers]
-    .slice(0, 10)
-    .sort((a, b) => (b[pointsField] || 0) - (a[pointsField] || 0));
+
+  useEffect(() => {
+    const fetchList = async () => {
+      const range =
+        selectedTab === 'Day' ? 'daily' : selectedTab === 'Week' ? 'weekly' : 'all';
+      try {
+        const res = await fetch(`${BASE_URL}/api/users/${userId}/leaderboard/${range}`);
+        if (res.ok) {
+          const data = await res.json();
+          const mapped = data.map((u, idx) => ({
+            ...u,
+            avatarUrl: leaderboardUsers[idx % leaderboardUsers.length].avatarUrl,
+          }));
+          setListData(mapped);
+        }
+      } catch (e) {
+        console.error('Failed to fetch leaderboard', e);
+      }
+    };
+    fetchList();
+  }, [selectedTab]);
 
   return (
     <ImageBackground
@@ -65,7 +86,7 @@ export default function LeaderboardScreen() {
           {/* 图片 + 文本：社区行 */}
           <View style={styles.communityRow}>
             <Image source={COMMUNITY_ICON} style={styles.communityIcon} />
-            <Text style={styles.communityText}>{currentUser.community}</Text>
+            <Text style={styles.communityText}>UCC Community</Text>
           </View>
 
           <View style={styles.pointRow}>

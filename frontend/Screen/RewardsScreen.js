@@ -1,5 +1,5 @@
 // RewardsScreen.js
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,34 @@ import {
   Platform,
 } from 'react-native';
 import RewardCard from '../components/RewardCard';
-import { rewardItems } from '../constants/mockRewards';
+import { fetchRewards } from '../service/api';
 import { PointsContext } from '../context/PointsContext';
+import { rewardItems as mockRewards } from '../constants/mockRewards';
 
 const RewardsScreen = () => {
   const isWeb = Platform.OS === 'web';
   const { points, deductPoints } = useContext(PointsContext);
+  const [rewards, setRewards] = useState([]);
+
+  useEffect(() => {
+    const loadRewards = async () => {
+      try {
+        const data = await fetchRewards();
+        const mapped = data.map((r) => {
+          const mock = mockRewards.find((m) => m.id === r.id);
+          return {
+            ...r,
+            costPoints: r.costPoints,
+            image: mock ? mock.image : null,
+          };
+        });
+        setRewards(mapped);
+      } catch (e) {
+        console.error('Failed to fetch rewards', e);
+      }
+    };
+    loadRewards();
+  }, []);
 
   const handleExchange = (item) => {
     if (points >= item.costPoints) {
@@ -46,7 +68,7 @@ const RewardsScreen = () => {
         <Text style={styles.header}>Exchange List</Text>
 
         <FlatList
-          data={rewardItems}
+          data={rewards}
           numColumns={2}
           keyExtractor={(item) => item.id.toString()}
           columnWrapperStyle={styles.row}
