@@ -1,5 +1,5 @@
 // LeaderboardScreen.js
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { currentUser, leaderboardUsers } from '../constants/mockUsers';
 import { PointsContext } from '../context/PointsContext';
+import { fetchCurrentUser, fetchLeaderboard } from '../service/api';
 
 // 阶段 0、1 用同一张图片；阶段 2 用满分图片
 const CARD_IMAGES = [
@@ -35,6 +35,8 @@ export default function LeaderboardScreen() {
 
   // 排行榜顶部选项卡，可在 Day/Week/All 间切换
   const [selectedTab, setSelectedTab] = useState('Day');
+  const [currentUser, setCurrentUser] = useState(null);
+  const [listData, setListData] = useState([]);
 
   const isFull = taskProgress >= 2;
 
@@ -49,9 +51,21 @@ export default function LeaderboardScreen() {
       : selectedTab === 'Week'
       ? 'weeklyPoints'
       : 'totalPoints';
-  const listData = [currentUser, ...leaderboardUsers]
-    .slice(0, 10)
-    .sort((a, b) => (b[pointsField] || 0) - (a[pointsField] || 0));
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const user = await fetchCurrentUser(1);
+        setCurrentUser(user);
+        const period = selectedTab === 'Day' ? 'daily' : selectedTab === 'Week' ? 'weekly' : 'all';
+        const users = await fetchLeaderboard(user.id, period);
+        setListData(users);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    load();
+  }, [selectedTab]);
 
   return (
     <ImageBackground
@@ -65,7 +79,7 @@ export default function LeaderboardScreen() {
           {/* 图片 + 文本：社区行 */}
           <View style={styles.communityRow}>
             <Image source={COMMUNITY_ICON} style={styles.communityIcon} />
-            <Text style={styles.communityText}>{currentUser.community}</Text>
+            <Text style={styles.communityText}>{currentUser?.community || 'UCC Community'}</Text>
           </View>
 
           <View style={styles.pointRow}>
@@ -147,7 +161,7 @@ export default function LeaderboardScreen() {
                 key={index}
                 style={[
                   styles.userCard,
-                  user.username?.includes?.('(Myself)') && styles.highlightCard,
+                  user.id === currentUser?.id && styles.highlightCard,
                 ]}
               >
                 <Text style={styles.rank}>{index + 1}</Text>

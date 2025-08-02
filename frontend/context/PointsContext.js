@@ -1,5 +1,5 @@
-import React, { createContext, useState } from 'react';
-import { currentUser } from '../constants/mockUsers';
+import React, { createContext, useState, useEffect } from 'react';
+import { fetchCurrentUser } from '../service/api';
 
 export const PointsContext = createContext({
   points: 0,
@@ -10,8 +10,14 @@ export const PointsContext = createContext({
 });
 
 export const PointsProvider = ({ children }) => {
-  const [points, setPoints] = useState(currentUser.dailyPoints || 0);
+  const [points, setPoints] = useState(0);
   const [taskProgress, setTaskProgress] = useState(0);
+
+  useEffect(() => {
+    fetchCurrentUser(1)
+      .then((u) => setPoints(u.dailyPoints || 0))
+      .catch((err) => console.error(err));
+  }, []);
 
   const addPoints = (p = 0) => setPoints((v) => v + p);
   const deductPoints = (p = 0) => setPoints((v) => Math.max(0, v - p));

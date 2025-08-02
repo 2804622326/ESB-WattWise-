@@ -1,5 +1,5 @@
 // RewardsScreen.js
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,19 @@ import {
   Platform,
 } from 'react-native';
 import RewardCard from '../components/RewardCard';
-import { rewardItems } from '../constants/mockRewards';
 import { PointsContext } from '../context/PointsContext';
+import { fetchRewards } from '../service/api';
 
 const RewardsScreen = () => {
   const isWeb = Platform.OS === 'web';
   const { points, deductPoints } = useContext(PointsContext);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetchRewards()
+      .then((data) => setItems(data))
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleExchange = (item) => {
     if (points >= item.costPoints) {
@@ -46,7 +53,7 @@ const RewardsScreen = () => {
         <Text style={styles.header}>Exchange List</Text>
 
         <FlatList
-          data={rewardItems}
+          data={items}
           numColumns={2}
           keyExtractor={(item) => item.id.toString()}
           columnWrapperStyle={styles.row}

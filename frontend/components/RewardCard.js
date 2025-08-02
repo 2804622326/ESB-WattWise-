@@ -7,10 +7,18 @@ const RewardCard = ({ item, onExchange }) => {
     <View style={styles.card}>
       {/* 图片插槽 */}
       <View style={styles.imageSlot}>
-        {item.image
-          ? <Image source={item.image} style={styles.image} resizeMode="contain" />
-          : <Text style={styles.iconText}>{item.icon}</Text>
-        }
+        {(() => {
+          const src = item.image
+            ? item.image
+            : item.imageUrl
+            ? { uri: item.imageUrl }
+            : null;
+          return src ? (
+            <Image source={src} style={styles.image} resizeMode="contain" />
+          ) : (
+            <Text style={styles.iconText}>{item.icon}</Text>
+          );
+        })()}
       </View>
       <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">{item.name}</Text>
       <Text style={styles.cost}>{item.costPoints} point</Text>
