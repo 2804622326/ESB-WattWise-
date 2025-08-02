@@ -1,15 +1,18 @@
 import { BASE_URL } from '../config';
+import { avatarMap } from '../constants/avatars';
 
 export async function fetchCurrentUser(userId) {
   const res = await fetch(`${BASE_URL}/api/users/${userId}`);
   if (!res.ok) throw new Error('Failed to fetch user');
-  return await res.json();
+  const data = await res.json();
+  return { ...data, avatarUrl: avatarMap[userId] };
 }
 
 export async function fetchLeaderboard(userId, period) {
   const res = await fetch(`${BASE_URL}/api/users/${userId}/leaderboard/${period}`);
   if (!res.ok) throw new Error('Failed to fetch leaderboard');
-  return await res.json();
+  const list = await res.json();
+  return list.map((u) => ({ ...u, avatarUrl: avatarMap[u.id] }));
 }
 
 export async function fetchTasks() {
