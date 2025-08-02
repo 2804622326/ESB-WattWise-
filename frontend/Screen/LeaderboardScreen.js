@@ -13,7 +13,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../config';
 import { PointsContext } from '../context/PointsContext';
-import { leaderboardUsers } from '../constants/mockUsers';
+import { currentUser, leaderboardUsers } from '../constants/mockUsers';
 
 // 阶段 0、1 用同一张图片；阶段 2 用满分图片
 const CARD_IMAGES = [
@@ -39,6 +39,14 @@ export default function LeaderboardScreen() {
   const [listData, setListData] = useState([]);
   const userId = 1;
 
+  // 将用户 id 与头像 url 建立映射，确保头像与用户名绑定
+  const avatarMap = React.useMemo(() => {
+    return [currentUser, ...leaderboardUsers].reduce((acc, u) => {
+      acc[u.id] = u.avatarUrl;
+      return acc;
+    }, {});
+  }, []);
+
   const isFull = taskProgress >= 2;
 
   const onPressComplete = () => {
@@ -61,9 +69,9 @@ export default function LeaderboardScreen() {
         const res = await fetch(`${BASE_URL}/api/users/${userId}/leaderboard/${range}`);
         if (res.ok) {
           const data = await res.json();
-          const mapped = data.map((u, idx) => ({
+          const mapped = data.map((u) => ({
             ...u,
-            avatarUrl: leaderboardUsers[idx % leaderboardUsers.length].avatarUrl,
+            avatarUrl: avatarMap[u.id] || DEFAULT_AVATAR,
           }));
           setListData(mapped);
         }

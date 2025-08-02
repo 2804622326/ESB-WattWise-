@@ -20,23 +20,28 @@ import { Images } from '../assets';
 
 export default function DashboardScreen() {
   const [mode, setMode] = useState('home');    // 'home' 或 'community'
-  const [stats, setStats] = useState(null);
+  const [homeStats, setHomeStats] = useState(null);
+  const [communityStats, setCommunityStats] = useState(null);
   const animated = useRef(new Animated.Value(0)).current;
   const isWeb = Platform.OS === 'web';
   const Container = isWeb ? ScrollView : View;
 
-// Fetch energy stats based on the selected mode
-useEffect(() => {
-  async function load() {
-    try {
-      const data = await fetchEnergyStats(mode, 1);
-      setStats(data);
-    } catch (e) {
-      console.error('Failed to fetch stats', e);
+  // 同时从后端获取两种模式的数据，确保正反面数据不同
+  useEffect(() => {
+    async function load() {
+      try {
+        const [homeData, communityData] = await Promise.all([
+          fetchEnergyStats('home', 1),
+          fetchEnergyStats('community', 1),
+        ]);
+        setHomeStats(homeData);
+        setCommunityStats(communityData);
+      } catch (e) {
+        console.error('Failed to fetch stats', e);
+      }
     }
-  }
-  load();
-}, [mode]);
+    load();
+  }, []);
 
   // 翻转动画插值
   const frontInterpol = animated.interpolate({
@@ -127,7 +132,7 @@ useEffect(() => {
                     <Image source={require('../assets/HomeScreen/lightning.png')} style={styles.pillIcon} />
                   </View>
                   <View style={styles.valueRow}>
-                    <Text style={styles.bigNumber}>{stats ? stats.used.toFixed(1) : '--'}</Text>
+                    <Text style={styles.bigNumber}>{homeStats ? homeStats.used.toFixed(1) : '--'}</Text>
                     <Text style={styles.unitText}> kWh</Text>
                   </View>
                   <Text style={styles.pillCaption}>Used</Text>
@@ -139,7 +144,7 @@ useEffect(() => {
                     <Image source={require('../assets/HomeScreen/star.png')} style={styles.pillIcon} />
                   </View>
                   <View style={styles.valueRow}>
-                    <Text style={styles.bigNumber}>{stats ? stats.earned : '--'}</Text>
+                    <Text style={styles.bigNumber}>{homeStats ? homeStats.earned : '--'}</Text>
                     <Text style={styles.unitText}> pts</Text>
                   </View>
                   <Text style={styles.pillCaption}>Earned</Text>
@@ -173,7 +178,7 @@ useEffect(() => {
                     <Image source={require('../assets/HomeScreen/lightning.png')} style={styles.pillIcon} />
                   </View>
                   <View style={styles.valueRow}>
-                    <Text style={styles.bigNumber}>{stats ? stats.used.toFixed(1) : '--'}</Text>
+                    <Text style={styles.bigNumber}>{communityStats ? communityStats.used.toFixed(1) : '--'}</Text>
                     <Text style={styles.unitText}> kWh</Text>
                   </View>
                   <Text style={styles.pillCaption}>Used</Text>
@@ -185,7 +190,7 @@ useEffect(() => {
                     <Image source={require('../assets/HomeScreen/star.png')} style={styles.pillIcon} />
                   </View>
                   <View style={styles.valueRow}>
-                    <Text style={styles.bigNumber}>{stats ? stats.earned : '--'}</Text>
+                    <Text style={styles.bigNumber}>{communityStats ? communityStats.earned : '--'}</Text>
                     <Text style={styles.unitText}> pts</Text>
                   </View>
                   <Text style={styles.pillCaption}>Earned</Text>
