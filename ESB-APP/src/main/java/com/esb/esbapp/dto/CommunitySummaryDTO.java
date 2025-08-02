@@ -4,72 +4,72 @@ package com.esb.esbapp.dto;
 
 
 public class CommunitySummaryDTO {
-    private int averageDailyPoints;
-    private int averageWeeklyPoints;
-    private int averageTotalPoints;
-    private double averageDailyEnergy;
-    private double averageWeeklyEnergy;
-    private double averageMonthlyEnergy;
+    private int dailyPoints;
+    private int weeklyPoints;
+    private int totalPoints;
+    private double dailyEnergy;
+    private double weeklyEnergy;
+    private double monthlyEnergy;
 
     public CommunitySummaryDTO() {
     }
 
-    public CommunitySummaryDTO(int averageDailyPoints, int averageWeeklyPoints,
-                               int averageTotalPoints, double averageDailyEnergy,
-                               double averageWeeklyEnergy, double averageMonthlyEnergy) {
-        this.averageDailyPoints = averageDailyPoints;
-        this.averageWeeklyPoints = averageWeeklyPoints;
-        this.averageTotalPoints = averageTotalPoints;
-        this.averageDailyEnergy = averageDailyEnergy;
-        this.averageWeeklyEnergy = averageWeeklyEnergy;
-        this.averageMonthlyEnergy = averageMonthlyEnergy;
+    public CommunitySummaryDTO(int dailyPoints, int weeklyPoints,
+                               int totalPoints, double dailyEnergy,
+                               double weeklyEnergy, double monthlyEnergy) {
+        this.dailyPoints = dailyPoints;
+        this.weeklyPoints = weeklyPoints;
+        this.totalPoints = totalPoints;
+        this.dailyEnergy = dailyEnergy;
+        this.weeklyEnergy = weeklyEnergy;
+        this.monthlyEnergy = monthlyEnergy;
     }
 
-    public int getAverageDailyPoints() {
-        return averageDailyPoints;
+    public int getDailyPoints() {
+        return dailyPoints;
     }
 
-    public void setAverageDailyPoints(int averageDailyPoints) {
-        this.averageDailyPoints = averageDailyPoints;
+    public void setDailyPoints(int dailyPoints) {
+        this.dailyPoints = dailyPoints;
     }
 
-    public int getAverageWeeklyPoints() {
-        return averageWeeklyPoints;
+    public int getWeeklyPoints() {
+        return weeklyPoints;
     }
 
-    public void setAverageWeeklyPoints(int averageWeeklyPoints) {
-        this.averageWeeklyPoints = averageWeeklyPoints;
+    public void setWeeklyPoints(int weeklyPoints) {
+        this.weeklyPoints = weeklyPoints;
     }
 
-    public int getAverageTotalPoints() {
-        return averageTotalPoints;
+    public int getTotalPoints() {
+        return totalPoints;
     }
 
-    public void setAverageTotalPoints(int averageTotalPoints) {
-        this.averageTotalPoints = averageTotalPoints;
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
     }
 
-    public double getAverageDailyEnergy() {
-        return averageDailyEnergy;
+    public double getDailyEnergy() {
+        return dailyEnergy;
     }
 
-    public void setAverageDailyEnergy(double averageDailyEnergy) {
-        this.averageDailyEnergy = averageDailyEnergy;
+    public void setDailyEnergy(double dailyEnergy) {
+        this.dailyEnergy = dailyEnergy;
     }
 
-    public double getAverageWeeklyEnergy() {
-        return averageWeeklyEnergy;
+    public double getWeeklyEnergy() {
+        return weeklyEnergy;
     }
 
-    public void setAverageWeeklyEnergy(double averageWeeklyEnergy) {
-        this.averageWeeklyEnergy = averageWeeklyEnergy;
+    public void setWeeklyEnergy(double weeklyEnergy) {
+        this.weeklyEnergy = weeklyEnergy;
     }
 
-    public double getAverageMonthlyEnergy() {
-        return averageMonthlyEnergy;
+    public double getMonthlyEnergy() {
+        return monthlyEnergy;
     }
 
-    public void setAverageMonthlyEnergy(double averageMonthlyEnergy) {
-        this.averageMonthlyEnergy = averageMonthlyEnergy;
+    public void setMonthlyEnergy(double monthlyEnergy) {
+        this.monthlyEnergy = monthlyEnergy;
     }
 }
