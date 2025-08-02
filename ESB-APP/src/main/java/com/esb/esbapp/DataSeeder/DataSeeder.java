@@ -41,32 +41,28 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedUsers() {
-        // Adjusted users so that the top 3 have different ranks for daily, weekly, and total points
+        // Use avatar URLs taken from frontend mock data so each user has a distinct image
         List<User> users = List.of(
-                // User 1: Highest daily, lowest weekly, mid total
-                new User(null, "Viggo", 300, 500, 600, 3.5, 20.0, 60.0,
-                        "https://randomuser.me/api/portraits/men/32.jpg"),
-                // User 2: Mid daily, highest weekly, lowest total
-                new User(null, "Lumi", 200, 600, 800, 2.8, 18.0, 55.0,
-                        "https://randomuser.me/api/portraits/women/44.jpg"),
-                // User 3: Lowest daily, mid weekly, highest total
-                new User(null, "Axel", 100, 250, 900, 3.1, 19.0, 52.0,
-                        "https://randomuser.me/api/portraits/men/85.jpg"),
-                // The rest stay similar, but ensure no accidental tie in top 3
-                new User(null, "Boden", 80, 150, 300, 2.0, 16.0, 50.0,
-                        "https://randomuser.me/api/portraits/men/12.jpg"),
-                new User(null, "Jett", 75, 140, 450, 2.5, 15.0, 48.0,
-                        "https://randomuser.me/api/portraits/men/45.jpg"),
-                new User(null, "Zara", 70, 230, 420, 2.4, 15.5, 47.0,
-                        "https://randomuser.me/api/portraits/women/65.jpg"),
-                new User(null, "Gwen", 60, 120, 400, 2.1, 14.0, 45.0,
-                        "https://randomuser.me/api/portraits/women/18.jpg"),
-                new User(null, "James", 40, 260, 620, 2.2, 13.0, 40.0,
-                        "https://randomuser.me/api/portraits/men/78.jpg"),
-                new User(null, "Vivian", 30, 300, 250, 1.9, 12.0, 38.0,
-                        "https://randomuser.me/api/portraits/women/85.jpg"),
-                new User(null, "Theo", 30, 160, 680, 1.8, 11.0, 36.0,
-                        "https://randomuser.me/api/portraits/men/5.jpg")
+                new User(null, "James (Myself)", 150, 430, 1020, 2.5, 18.3, 71.6,
+                        "https://randomuser.me/api/portraits/men/10.jpg"),
+                new User(null, "Neighbor A", 180, 520, 1600, 3.5, 20.0, 60.0,
+                        "https://randomuser.me/api/portraits/men/1.jpg"),
+                new User(null, "Neighbor B", 210, 400, 1050, 2.8, 18.0, 55.0,
+                        "https://randomuser.me/api/portraits/women/2.jpg"),
+                new User(null, "Neighbor C", 130, 460, 1800, 3.1, 19.0, 52.0,
+                        "https://randomuser.me/api/portraits/men/3.jpg"),
+                new User(null, "Neighbor D", 170, 610, 1300, 2.0, 16.0, 50.0,
+                        "https://randomuser.me/api/portraits/women/4.jpg"),
+                new User(null, "Neighbor E", 200, 480, 1100, 2.5, 15.0, 48.0,
+                        "https://randomuser.me/api/portraits/men/5.jpg"),
+                new User(null, "Neighbor F", 120, 390, 1500, 2.4, 15.5, 47.0,
+                        "https://randomuser.me/api/portraits/women/6.jpg"),
+                new User(null, "Neighbor G", 160, 570, 1250, 2.1, 14.0, 45.0,
+                        "https://randomuser.me/api/portraits/men/7.jpg"),
+                new User(null, "Neighbor H", 190, 430, 1000, 2.2, 13.0, 40.0,
+                        "https://randomuser.me/api/portraits/women/8.jpg"),
+                new User(null, "Neighbor I", 140, 440, 1350, 1.9, 12.0, 38.0,
+                        "https://randomuser.me/api/portraits/men/9.jpg")
         );
         userRepository.saveAll(users);
         System.out.println("✅ Seeded 10 users.");
@@ -87,18 +83,12 @@ public class DataSeeder implements CommandLineRunner {
 
     private void seedRewards() {
         List<RewardItem> rewards = List.of(
-                new RewardItem(null, "Electricity Deduction Voucher €5", "€5 off your next electricity bill", 450,
-                        "https://via.placeholder.com/150?text=Electricity+5"),
-                new RewardItem(null, "Smart Meter", "Track your energy usage", 1200,
-                        "https://via.placeholder.com/150?text=Smart+Meter"),
-                new RewardItem(null, "Supermarket Voucher €5", "Valid in major stores", 500,
-                        "https://via.placeholder.com/150?text=Voucher+5"),
-                new RewardItem(null, "Electricity Deduction Voucher €1", "€1 off electricity bill", 100,
-                        "https://via.placeholder.com/150?text=Electricity+1"),
-                new RewardItem(null, "Mini Plant Planting Set", "Grow your own herbs or flowers", 400,
-                        "https://via.placeholder.com/150?text=Plant+Set"),
-                new RewardItem(null, "Community Sharing Tool Voucher", "Borrow tools from community center", 300,
-                        "https://via.placeholder.com/150?text=Tool+Voucher")
+                new RewardItem(null, "Smart Plug", "Energy monitoring plug", 450, null),
+                new RewardItem(null, "Shopping Bag", "Reusable shopping bag", 300, null),
+                new RewardItem(null, "Electricity Voucher €1", "€1 off electricity bill", 100, null),
+                new RewardItem(null, "Tool Sharing Voucher", "Borrow tools from community center", 600, null),
+                new RewardItem(null, "Supermarket €5", "€5 voucher for supermarkets", 500, null),
+                new RewardItem(null, "Flower", "Mini plant growing set", 800, null)
         );
         rewardItemRepository.saveAll(rewards);
         System.out.println("✅ Seeded 6 reward items.");

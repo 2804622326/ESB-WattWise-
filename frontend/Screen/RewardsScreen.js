@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import RewardCard from '../components/RewardCard';
 import { fetchRewards } from '../service/api';
+import { rewardItems as rewardMocks } from '../constants/mockRewards';
 import { PointsContext } from '../context/PointsContext';
 
 const RewardsScreen = () => {
@@ -22,7 +23,11 @@ const RewardsScreen = () => {
     const loadRewards = async () => {
       try {
         const data = await fetchRewards();
-        setRewards(data);
+        const merged = data.map(r => {
+          const mock = rewardMocks.find(m => m.id === r.id);
+          return { ...r, image: mock ? mock.image : null };
+        });
+        setRewards(merged);
       } catch (e) {
         console.error('Failed to fetch rewards', e);
       }
