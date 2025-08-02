@@ -1,5 +1,5 @@
 // RewardsScreen.js
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,16 +10,42 @@ import {
   Platform,
 } from 'react-native';
 import RewardCard from '../components/RewardCard';
-import { rewardItems } from '../constants/mockRewards';
 import { PointsContext } from '../context/PointsContext';
+import { fetchRewards, redeemReward } from '../service/api';
+
+const REWARD_IMAGES = {
+  1: require('../assets/Reward/1.png'),
+  2: require('../assets/Reward/2.png'),
+  3: require('../assets/Reward/3.png'),
+  4: require('../assets/Reward/4.png'),
+  5: require('../assets/Reward/5.png'),
+  6: require('../assets/Reward/6.png'),
+};
 
 const RewardsScreen = () => {
   const isWeb = Platform.OS === 'web';
-  const { points, deductPoints } = useContext(PointsContext);
+  const { points, deductPoints, user } = useContext(PointsContext);
+  const [rewardItems, setRewardItems] = useState([]);
+
+  useEffect(() => {
+    fetchRewards()
+      .then((data) =>
+        setRewardItems(
+          data.map((r) => ({
+            ...r,
+            image: REWARD_IMAGES[r.id] || (r.imageUrl ? { uri: r.imageUrl } : null),
+          }))
+        )
+      )
+      .catch(() => setRewardItems([]));
+  }, []);
 
   const handleExchange = (item) => {
     if (points >= item.costPoints) {
       deductPoints(item.costPoints);
+      if (user) {
+        redeemReward(user.id, item.id).catch(() => {});
+      }
       const msg = `You have redeemed: ${item.name}`;
       if (Platform.OS === 'web') {
         window.alert(`Success\n${msg}`);

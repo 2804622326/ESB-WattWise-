@@ -1,6 +1,6 @@
 // screens/HomeScreen.js
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import {
   View,
   Text,
@@ -15,21 +15,24 @@ import {
 
 import { BlurView } from 'expo-blur';
 
-// Temporarily use local mock data instead of calling the backend
-import { energyStats } from '../constants/mockStats';
 import { Images } from '../assets';
+import { fetchEnergyStats } from '../service/api';
+import { PointsContext } from '../context/PointsContext';
 
 export default function DashboardScreen() {
-  const [mode, setMode] = useState('home');    // 'home' 或 'community'
+  const { user } = useContext(PointsContext);
+  const [mode, setMode] = useState('home');
   const [stats, setStats] = useState(null);
   const animated = useRef(new Animated.Value(0)).current;
   const isWeb = Platform.OS === 'web';
   const Container = isWeb ? ScrollView : View;
 
-// For demo purposes, switch stats based on the selected mode without API calls
-useEffect(() => {
-  setStats(energyStats[mode]);
-}, [mode]);
+  useEffect(() => {
+    if (!user) return;
+    fetchEnergyStats(mode, user.id)
+      .then(setStats)
+      .catch(() => setStats(null));
+  }, [mode, user]);
 
   // 翻转动画插值
   const frontInterpol = animated.interpolate({
@@ -92,7 +95,9 @@ useEffect(() => {
         <Image source={Images.bell} style={styles.iconSmall} />
       </View>
 
-      <Text style={styles.greeting}>Good Morning James!</Text>
+      <Text style={styles.greeting}>
+        Good Morning {user ? user.username : ''}!
+      </Text>
 
       {/* 翻转卡片 */}
       <View style={styles.cardWrapper}>
