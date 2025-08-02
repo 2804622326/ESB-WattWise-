@@ -25,15 +25,11 @@ export async function fetchRewards() {
 }
 
 export async function fetchEnergyStats(mode, userId) {
-  if (mode === 'home') {
-    const user = await fetchCurrentUser(userId);
-    return { used: user.monthlyEnergy, earned: user.totalPoints };
-  }
-  const res = await fetch(`${BASE_URL}/api/users/all`);
-  if (!res.ok) throw new Error('Failed to fetch community stats');
-  const allUsers = await res.json();
-  return {
-    used: allUsers.reduce((sum, u) => sum + (u.monthlyEnergy || 0), 0),
-    earned: allUsers.reduce((sum, u) => sum + (u.totalPoints || 0), 0),
-  };
+  const url =
+    mode === 'home'
+      ? `${BASE_URL}/api/stats/home/${userId}`
+      : `${BASE_URL}/api/stats/community`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch energy stats');
+  return await res.json();
 }
