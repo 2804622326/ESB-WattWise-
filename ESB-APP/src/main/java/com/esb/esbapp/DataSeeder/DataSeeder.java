@@ -29,9 +29,11 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (userRepository.count() == 0) {
-            seedUsers();
-        }
+        // Always reseed users so avatar URLs stay in sync with the source data
+        userRepository.deleteAll();
+        seedUsers();
+
+        // Tasks and rewards change less often, but we still refresh them when empty
         if (taskRepository.count() == 0) {
             seedTasks();
         }
