@@ -2,11 +2,12 @@ import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { PointsContext } from '../context/PointsContext';
+import { completeTask } from '../service/api';
 
 export default function TaskDetailScreen() {
   const route = useRoute();
   const navigation = useNavigation();
-  const { addPoints, incrementProgress } = useContext(PointsContext);
+  const { addPoints, incrementProgress, user } = useContext(PointsContext);
 
   const task = route.params?.task || {};
   const markComplete = route.params?.onComplete;
@@ -18,6 +19,9 @@ export default function TaskDetailScreen() {
     markComplete?.();
     addPoints(points);
     incrementProgress();
+    if (user) {
+      completeTask(user.id, task.id).catch(() => {});
+    }
     navigation.replace('TaskSuccess', { points });
   };
 

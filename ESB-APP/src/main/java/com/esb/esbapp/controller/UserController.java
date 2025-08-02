@@ -2,6 +2,8 @@ package com.esb.esbapp.controller;
 
 import com.esb.esbapp.model.User;
 import com.esb.esbapp.service.UserService;
+import com.esb.esbapp.dto.UserSummaryDTO;
+import com.esb.esbapp.dto.CommunitySummaryDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +27,14 @@ public class UserController {
     }
 
     /**
+     * 获取个人能耗和积分汇总
+     */
+    @GetMapping("/{id}/summary")
+    public UserSummaryDTO getUserSummary(@PathVariable Long id) {
+        return userService.getUserSummary(id);
+    }
+
+    /**
      * 完成任务，增加用户积分
      */
     @PostMapping("/{id}/complete-task/{taskId}")
@@ -38,6 +48,14 @@ public class UserController {
     @PostMapping("/{id}/redeem/{rewardItemId}")
     public String redeemReward(@PathVariable Long id, @PathVariable Long rewardItemId) {
         return userService.redeemReward(id, rewardItemId);
+    }
+
+    /**
+     * 社区平均能耗和积分
+     */
+    @GetMapping("/community-summary")
+    public CommunitySummaryDTO getCommunitySummary() {
+        return userService.getCommunitySummary();
     }
 
     /**

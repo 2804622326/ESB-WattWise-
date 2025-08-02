@@ -7,6 +7,8 @@ import com.esb.esbapp.repository.UserRepository;
 import com.esb.esbapp.repository.TaskRepository;
 import com.esb.esbapp.repository.RewardItemRepository;
 import com.esb.esbapp.service.UserService;
+import com.esb.esbapp.dto.UserSummaryDTO;
+import com.esb.esbapp.dto.CommunitySummaryDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -86,6 +88,42 @@ public class UserServiceImpl implements UserService {
         } else {
             return "Not enough points.";
         }
+    }
+
+    @Override
+    public UserSummaryDTO getUserSummary(Long id) {
+        User user = getUserById(id);
+        return new UserSummaryDTO(
+                user.getDailyPoints(),
+                user.getWeeklyPoints(),
+                user.getTotalPoints(),
+                user.getDailyEnergy(),
+                user.getWeeklyEnergy(),
+                user.getMonthlyEnergy()
+        );
+    }
+
+    @Override
+    public CommunitySummaryDTO getCommunitySummary() {
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            return new CommunitySummaryDTO();
+        }
+        double avgDailyPoints = users.stream().mapToInt(User::getDailyPoints).average().orElse(0);
+        double avgWeeklyPoints = users.stream().mapToInt(User::getWeeklyPoints).average().orElse(0);
+        double avgTotalPoints = users.stream().mapToInt(User::getTotalPoints).average().orElse(0);
+        double avgDailyEnergy = users.stream().mapToDouble(User::getDailyEnergy).average().orElse(0);
+        double avgWeeklyEnergy = users.stream().mapToDouble(User::getWeeklyEnergy).average().orElse(0);
+        double avgMonthlyEnergy = users.stream().mapToDouble(User::getMonthlyEnergy).average().orElse(0);
+
+        return new CommunitySummaryDTO(
+                (int) Math.round(avgDailyPoints),
+                (int) Math.round(avgWeeklyPoints),
+                (int) Math.round(avgTotalPoints),
+                avgDailyEnergy,
+                avgWeeklyEnergy,
+                avgMonthlyEnergy
+        );
     }
 
     @Override
