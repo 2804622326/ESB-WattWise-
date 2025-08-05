@@ -1,8 +1,10 @@
 package com.esb.esbapp.service.impl;
 
-import com.esb.esbapp.model.User;
-import com.esb.esbapp.model.Task;
+import com.esb.esbapp.dto.CommunitySummaryDTO;
+import com.esb.esbapp.dto.UserSummaryDTO;
 import com.esb.esbapp.model.RewardItem;
+import com.esb.esbapp.model.Task;
+import com.esb.esbapp.model.User;
 import com.esb.esbapp.repository.UserRepository;
 import com.esb.esbapp.repository.TaskRepository;
 import com.esb.esbapp.repository.RewardItemRepository;
@@ -91,5 +93,44 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserSummaryDTO getUserSummary(Long id) {
+        User user = getUserById(id);
+        return new UserSummaryDTO(
+                user.getDailyPoints(),
+                user.getWeeklyPoints(),
+                user.getTotalPoints(),
+                user.getDailyEnergy(),
+                user.getWeeklyEnergy(),
+                user.getMonthlyEnergy()
+        );
+    }
+
+    @Override
+    public CommunitySummaryDTO getCommunitySummary() {
+        List<User> users = userRepository.findAll();
+        int count = users.size();
+        if (count == 0) {
+            return new CommunitySummaryDTO();
+        }
+
+        int sumDailyPoints = users.stream().mapToInt(User::getDailyPoints).sum();
+        int sumWeeklyPoints = users.stream().mapToInt(User::getWeeklyPoints).sum();
+        int sumTotalPoints = users.stream().mapToInt(User::getTotalPoints).sum();
+
+        double sumDailyEnergy = users.stream().mapToDouble(User::getDailyEnergy).sum();
+        double sumWeeklyEnergy = users.stream().mapToDouble(User::getWeeklyEnergy).sum();
+        double sumMonthlyEnergy = users.stream().mapToDouble(User::getMonthlyEnergy).sum();
+
+        return new CommunitySummaryDTO(
+                sumDailyPoints / count,
+                sumWeeklyPoints / count,
+                sumTotalPoints / count,
+                sumDailyEnergy / count,
+                sumWeeklyEnergy / count,
+                sumMonthlyEnergy / count
+        );
     }
 }
